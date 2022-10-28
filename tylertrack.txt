@@ -15,3 +15,11 @@
 3 10/19/2022 4 game-design 12:00
 4 10/20/2022 55 interactive-media 9:30
 4 10/20/2022 -2 discrete-math 12:00
+5 10/21/2022 9 game-design 12:00
+1 10/24/2022 26 game-design 12:00
+2 10/25/2022 29 interactive-media 9:30
+2 10/25/2022 3 discrete-math 12:00
+2 10/25/2022 8 film 18:30
+3 10/26/2022 8 game-design 12:00
+4 10/27/2022 120 interactive-media 9:30
+4 10/27/2022 1 discrete-math 12:00

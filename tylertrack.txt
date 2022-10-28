@@ -1,0 +1,17 @@
+*Day (monday=1) | date | lateness | class | class-time
+1 9/26/2022 30 game-design 12:00
+2 9/27/2022 0 discrete-math 12:00
+3 9/28/2022 4 game-design 12:00
+4 9/29/2022 30 discrete-math 12:00
+5 9/30/2022 11 game-design 12:00
+4 10/6/2022 120 discrete-math 12:00
+5 10/7/2022 120 game-design 12:00
+4 10/13/2022 37 interactive-media 9:30
+4 10/13/2022 4 discrete-math 12:00
+5 10/14/2022 6 game-design 12:00
+1 10/17/2022 8 game-design 12:00
+2 10/18/2022 55 interactive-media 9:30
+2 10/18/2022 -2 film 18:30
+3 10/19/2022 4 game-design 12:00
+4 10/20/2022 55 interactive-media 9:30
+4 10/20/2022 -2 discrete-math 12:00

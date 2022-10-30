@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 import numpy as np
+from scipy.interpolate import make_interp_spline
 
 class Data():
   """[summary]
@@ -61,6 +62,39 @@ class Data():
     a, b = np.polyfit(self.x, self.y, 1)
 
     return (self.x, a*self.x+b)
+
+  def smooth_data(self, smoothness = 500) -> tuple:
+    """[summary] Smooths out the data thats gets displayed
+
+    Args:
+      smoothness (int, optional): The amount of data points generated between x values (linear line is 50). Defaults to 500.
+
+    Raises:
+      Exception: smoothness of the line is less than 0
+
+    Returns:
+        tuple: your new data points, in the form of (x axis, y axis)
+    """
+
+    if (smoothness < 0):
+      raise Exception("Smoothness of the data must be above or equal to 0")
+
+    X_Y_Spline = make_interp_spline(self.x, self.y)
+ 
+    # Returns evenly spaced numbers
+    # over a specified interval.
+    X_ = np.linspace(self.x.min(), self.x.max(), smoothness)
+    Y_ = X_Y_Spline(X_)
+
+    return (X_, Y_)
+
+  def derivative(self) -> tuple:
+    
+    x = self.x
+    y = self.y
+    der = np.diff(y) / np.diff(x)
+    x2 = (x[:-1] + x[1:]) / 2
+    return (x2, der)
   
 
   def get_max(self) -> int:

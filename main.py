@@ -71,7 +71,8 @@ def main() -> None:
 
   tymethod.set_labels("error", "Entry prediction #", "Percent Error (%)", "Prediction algorithms of Tylers lateness")
 
-  typre.predict(lateness, len(lateness.x))
+  #typre.predict(lateness, len(lateness.x))
+  typre.predict_future(lateness, 3)
 
   tymethod.show()
 

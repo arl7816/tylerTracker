@@ -89,6 +89,11 @@ class Data():
     return (X_, Y_)
 
   def derivative(self) -> tuple:
+    """[summary] get the derivative of any line (recommend smoothing out data points first, for very linear plots)
+
+    Returns:
+        tuple (list[int], list[int]): returns a tuple of arrays representing the x and y coordinates of the derivative
+    """
     
     x = self.x
     y = self.y

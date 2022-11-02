@@ -85,10 +85,11 @@ def der_prediction(data: tyclasses.Data, x: int) -> int:
 
 def entry_prediction(data: tyclasses.Data, x: int) -> int:
   def g(x: int, l: tyclasses.Data, s: tyclasses.Data) -> int:
-    n = len(l.x)
-    ns = len(s.x)
-    xf = round(ns*x/n)
-    
+    n = len(l.x) - 1
+    ns = len(s.x) - 1
+    xf = floor(ns*x/n)
+
+  
     return xf
 
   def form_entries(data: tyclasses.Data, x: int) -> tyclasses.Data:
@@ -99,11 +100,8 @@ def entry_prediction(data: tyclasses.Data, x: int) -> int:
     
     temp_data = [i for i in range(x)]
 
-    print(len(temp_data))
-    print(len(weekdays))
     weekdays = tyclasses.Data((temp_data, weekdays))
     weekdays.remap(data.get_max())
-    print("Weekdays:", len(weekdays.y))
     return weekdays
   
   entries = tyclasses.Data(form_entries(data, x).smooth_data())
@@ -120,11 +118,25 @@ def entry_prediction(data: tyclasses.Data, x: int) -> int:
   return y
 
 
-def predict_future():
-  pass
+def predict_future(data: tyclasses.Data, future: int):
+  algors = [random_prediction, random_prediction_unbalanced, slope_prediction, slope_prediction_average, der_prediction, entry_prediction]
 
-def predict(data: tyclasses.TylerData, x, expected=False):
-  x -= 1
+  for algor in algors:
+    print("Prediction based on the " + algor.__str__() + " prediction model")
+    temp_data = tyclasses.Data((data.x, data.y))
+    for i in range(future):
+      x = len(temp_data.x)
+
+      if algor == random_prediction or algor == random_prediction_unbalanced:
+        prediction = algor()
+      else:
+        prediction = algor(temp_data, x)
+
+      print("Entry #" + str(i + 1) + ": ("  + str(x) + "," + str(prediction) + ")")
+      temp_data.x = numpy.append(temp_data.x, x)
+      temp_data.y = numpy.append(temp_data.y, prediction)
+
+def predict(data: tyclasses.Data, x, expected=False):
   def get_error(e: int, a: int) -> int:
     return round(abs(e-a)/e * 100)
 

@@ -16,21 +16,21 @@ def main() -> None:
   weekdays = tyclass.Data((data.get_xaxis(), weekdays))
   weekdays.remap(lateness.get_max())
 
-  late_graph = tymethod.plot((2,1,2), lateness, "blue", "lateness (in minutes)", key="lateness")
+  #late_graph = tymethod.plot((2,1,2), lateness, "blue", "lateness (in minutes)", key="lateness")
 
-  tymethod.set_labels("lateness", "Entry points", "lateness (in minutes)", "What aee doinng Tylaa u silly boi u `:(")
+  #tymethod.set_labels("lateness", "Entry points", "lateness (in minutes)", "What aee doinng Tylaa u silly boi u `:(")
 
   #tymethod.plot((2,1,2), weekdays, "orange", "entry # (1-5)", key="weekdays")
 
   #tymethod.plot((2,1,2), tyclass.Data(lateness.line_of_best_fit()), "red", legend="Line of best fit (lateness)")
   #tymethod.plot((2,1,2), tyclass.Data(weekdays.line_of_best_fit()), "purple", legend="Line of best fit (weekdays)")
 
-  late_graph = tymethod.plot((2,1,2), tyclass.Data(lateness.smooth_data()), "purple")
+  #late_graph = tymethod.plot((2,1,2), tyclass.Data(lateness.smooth_data()), "purple")
   smooth_weekdays = tyclass.Data(weekdays.smooth_data())
-  tymethod.plot((2,1,2), smooth_weekdays, "orange")
+  #tymethod.plot((2,1,2), smooth_weekdays, "orange")
 
-  late_graph.grid()
-  late_graph.legend()
+  #late_graph.grid()
+  #late_graph.legend()
   
   day_average = tyclass.Data((["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], lateness.get_averages(True, weekdays.y)[1]))
 
@@ -42,15 +42,32 @@ def main() -> None:
 
   #tymethod.plot((2,1,2), tyclass.Data(smooth_weekdays.derivative()), "black")
 
-  """x = smooth_weekdays[0]
-  y = smooth_weekdays[1]
-  der = np.diff(y) / np.diff(x)
-  print(der)
-  x2 = (x[:-1] + x[1:]) / 2
-  matplotlib.pyplot.plot(x2, der, 'r', x, y, 'g', x, -np.sin(x),'b')
-  """
+  xs = []
+  r1 = []
+  r_unb = []
+  slope_pre = []
+  slope_pre_aver = []
+  der_pre = []
+  entr_der_pre = []
 
-  typre.predict(lateness, 16, expected=True)
+  for i in range(5, len(lateness.x)):
+    xs.append(i)
+    result = typre.predict(lateness, i, True)
+    r1.append(result[0])
+    r_unb.append(result[1])
+    slope_pre.append(result[2])
+    slope_pre_aver.append(result[3])
+    der_pre.append(result[4])
+    entr_der_pre.append(result[5])
+  
+  tymethod.plot((2,1,2), tyclass.Data((xs, r1)), "red", key="error")
+  tymethod.plot((2,1,2), tyclass.Data((xs, r_unb)), "blue")
+  tymethod.plot((2,1,2), tyclass.Data((xs, slope_pre)), "green")
+  tymethod.plot((2,1,2), tyclass.Data((xs, slope_pre_aver)), "purple")
+  tymethod.plot((2,1,2), tyclass.Data((xs, der_pre)), "black")
+  tymethod.plot((2,1,2), tyclass.Data((xs, entr_der_pre)), "orange")
+
+  tymethod.subplots["error"].grid()
 
   tymethod.show()
 

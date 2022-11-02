@@ -1,3 +1,4 @@
+from math import floor
 import numpy
 import TylerClasses as tyclasses
 from random import randint as ran
@@ -59,17 +60,36 @@ def slope_prediction_average(data: tyclasses.Data, x: int) -> int:
   return y
 
 def der_prediction(data: tyclasses.Data, x: int) -> int:
-  x -= 1
-  new_data = tyclasses.Data(tyclasses.Data((data.x, data.y)).derivative())
+  def g(x: int, l: tyclasses.Data, s: tyclasses.Data) -> int:
+    n = len(l.x)
+    ns = len(s.x)
+    xf = round(ns*x/n)
 
-  m = new_data.y[x]
-  yo = data.y[x]
-  deltaX = (x+1) - x
+    if abs(data.x[x] - s.x[xf]) >= 1:
+      raise Exception("g(x) function got a difference too high to be accurate")
+    
+    return xf
+  
+  smooth_data = tyclasses.Data(data.smooth_data())
+  derivative = tyclasses.Data(smooth_data.derivative())
 
-  return m*deltaX+yo # y coor
+  gx = g(x, data, smooth_data)
+  slope = derivative.y[gx]
+  deltaX = (x - (x-1))
+  yo = data.y[x-1]
+
+  y = slope*deltaX + yo
+  return y
+
+
 
 def entry_prediction(data: tyclasses.Data, x: int) -> int:
-  print(x)
+  def g(x: int, l: tyclasses.Data, s: tyclasses.Data) -> int:
+    n = len(l.x)
+    ns = len(s.x)
+    xf = round(ns*x/n)
+    
+    return xf
 
   def form_entries(data: tyclasses.Data, x: int) -> tyclasses.Data:
     weekdays = [i % 5 + 1 for i in range(x)]
@@ -88,14 +108,15 @@ def entry_prediction(data: tyclasses.Data, x: int) -> int:
   
   entries = tyclasses.Data(form_entries(data, x).smooth_data())
   print("len:", len(entries.y))
-  entries = tyclasses.Data(entries.derivative())
+  derivative = tyclasses.Data(entries.derivative())
 
-  m = entries.y[x]
+  gx = g(x, data, entries)
+  predicted_slope = derivative.y[gx]
   yo = data.y[x-1]
 
   xn1 = x-1
 
-  y = m(x - xn1) + yo
+  y = predicted_slope*(x - xn1) + yo
   return y
 
 
@@ -115,7 +136,7 @@ def predict(data: tyclasses.TylerData, x, expected=False):
   slope_pred = slope_prediction(data, x)
   slope_pred_aver = slope_prediction_average(data, x)
   der_pre = der_prediction(data, x)
-  #entr_der_pre = entry_prediction(data, x)
+  entr_der_pre = entry_prediction(data, x)
 
   y = None
   if expected:
@@ -134,4 +155,6 @@ def predict(data: tyclasses.TylerData, x, expected=False):
     print("Doing a slope prediction: (x,l(x) = (" + str(x) + "," + str(slope_pred) + ") " + format_error(y, slope_pred))
     print("Doing a average slope prediction: (x,l(x) = (" + str(x) + "," + str(slope_pred_aver) + ") " + format_error(y, slope_pred_aver))
     print("Doing a derivative prediction: (x, l(x)) = (" + str(x) + "," + str(der_pre) + ")" + format_error(y, der_pre))
-    #print("Doing a entry derivative prediction: (x,l(x)) = (" + str(x) + "," + str(entr_der_pre) + ")" + format_error(y, entr_der_pre))
+    print("Doing a entry derivative prediction: (x,l(x)) = (" + str(x) + "," + str(entr_der_pre) + ")" + format_error(y, entr_der_pre))
+  
+  return get_error(y, random), get_error(y, random_unbal), get_error(y, slope_pred), get_error(y,slope_pred_aver), get_error(y,der_pre), get_error(y,entr_der_pre)

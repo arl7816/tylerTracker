@@ -26,3 +26,4 @@
 5 10/28/2022 34 game-design 12:00
 2 11/1/2022 115 interactive-media 9:30
 2 11/1/2022 1 discrete-math 12:00
+3 11/2/2022 26 game-design 12:00

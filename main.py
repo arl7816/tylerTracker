@@ -16,31 +16,30 @@ def main() -> None:
   weekdays = tyclass.Data((data.get_xaxis(), weekdays))
   weekdays.remap(lateness.get_max())
 
-  #late_graph = tymethod.plot((2,1,2), lateness, "blue", "lateness (in minutes)", key="lateness")
+  #late_graph = tymethod.plot((3,1,2), lateness, "blue", "lateness (in minutes)", key="lateness")
+  late_graph = tymethod.plot((3,1,2), tyclass.Data(lateness.smooth_data()), "purple", key="lateness")
 
-  #tymethod.set_labels("lateness", "Entry points", "lateness (in minutes)", "What aee doinng Tylaa u silly boi u `:(")
+  tymethod.set_labels("lateness", "Entry points", "lateness (in minutes)", "What aee doinng Tylaa u silly boi u `:(")
 
-  #tymethod.plot((2,1,2), weekdays, "orange", "entry # (1-5)", key="weekdays")
+  #tymethod.plot((3,1,2), weekdays, "orange", "entry # (1-5)", key="weekdays")
 
-  #tymethod.plot((2,1,2), tyclass.Data(lateness.line_of_best_fit()), "red", legend="Line of best fit (lateness)")
-  #tymethod.plot((2,1,2), tyclass.Data(weekdays.line_of_best_fit()), "purple", legend="Line of best fit (weekdays)")
+  tymethod.plot((3,1,2), tyclass.Data(lateness.line_of_best_fit()), "red", legend="Line of best fit (lateness)")
+  tymethod.plot((3,1,2), tyclass.Data(weekdays.line_of_best_fit()), "blue", legend="Line of best fit (weekdays)")
 
-  #late_graph = tymethod.plot((2,1,2), tyclass.Data(lateness.smooth_data()), "purple")
+  
   smooth_weekdays = tyclass.Data(weekdays.smooth_data())
-  #tymethod.plot((2,1,2), smooth_weekdays, "orange")
+  tymethod.plot((3,1,2), smooth_weekdays, "orange")
 
-  #late_graph.grid()
-  #late_graph.legend()
+  late_graph.grid()
+  late_graph.legend()
   
   day_average = tyclass.Data((["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], lateness.get_averages(True, weekdays.y)[1]))
 
-  tymethod.bar((2,2,1), day_average, color="purple", key="bar")
+  tymethod.bar((3,2,1), day_average, color="purple", key="bar")
   tymethod.set_labels("bar", "Days of the week", "Average lateness (minutes)", "Average lateness per day")
 
-  tymethod.bar((2,2,2), tyclass.Data(tyclass.Data(data.convert_into_data("class_name", "lateness")).get_averages(True)), "green", key="class")
+  tymethod.bar((3,2,2), tyclass.Data(tyclass.Data(data.convert_into_data("class_name", "lateness")).get_averages(True)), "green", key="class")
   tymethod.set_labels("class", "classes" , "average lateness (minutes)", "Average lateness per class")
-
-  #tymethod.plot((2,1,2), tyclass.Data(smooth_weekdays.derivative()), "black")
 
   xs = []
   r1 = []
@@ -60,14 +59,19 @@ def main() -> None:
     der_pre.append(result[4])
     entr_der_pre.append(result[5])
   
-  tymethod.plot((2,1,2), tyclass.Data((xs, r1)), "red", key="error")
-  tymethod.plot((2,1,2), tyclass.Data((xs, r_unb)), "blue")
-  tymethod.plot((2,1,2), tyclass.Data((xs, slope_pre)), "green")
-  tymethod.plot((2,1,2), tyclass.Data((xs, slope_pre_aver)), "purple")
-  tymethod.plot((2,1,2), tyclass.Data((xs, der_pre)), "black")
-  tymethod.plot((2,1,2), tyclass.Data((xs, entr_der_pre)), "orange")
+  tymethod.plot((3,1,3), tyclass.Data((xs, r1)), "red", key="error", legend="Random")
+  tymethod.plot((3,1,3), tyclass.Data((xs, r_unb)), "blue", legend="Unbalanced Random")
+  tymethod.plot((3,1,3), tyclass.Data((xs, slope_pre)), "green", legend="Slope prediction")
+  tymethod.plot((3,1,3), tyclass.Data((xs, slope_pre_aver)), "purple", legend="Average slope prediction")
+  tymethod.plot((3,1,3), tyclass.Data((xs, der_pre)), "black", key="error", legend="dy/dx prediction")
+  tymethod.plot((3,1,3), tyclass.Data((xs, entr_der_pre)), "orange", legend="Entry dy/dx prediction")
 
   tymethod.subplots["error"].grid()
+  tymethod.subplots["error"].legend()
+
+  tymethod.set_labels("error", "Entry prediction #", "Percent Error (%)", "Prediction algorithms of Tylers lateness")
+
+  typre.predict(lateness, len(lateness.x))
 
   tymethod.show()
 

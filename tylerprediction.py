@@ -157,4 +157,5 @@ def predict(data: tyclasses.TylerData, x, expected=False):
     print("Doing a derivative prediction: (x, l(x)) = (" + str(x) + "," + str(der_pre) + ")" + format_error(y, der_pre))
     print("Doing a entry derivative prediction: (x,l(x)) = (" + str(x) + "," + str(entr_der_pre) + ")" + format_error(y, entr_der_pre))
   
-  return get_error(y, random), get_error(y, random_unbal), get_error(y, slope_pred), get_error(y,slope_pred_aver), get_error(y,der_pre), get_error(y,entr_der_pre)
+  if expected:
+    return get_error(y, random), get_error(y, random_unbal), get_error(y, slope_pred), get_error(y,slope_pred_aver), get_error(y,der_pre), get_error(y,entr_der_pre)

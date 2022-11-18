@@ -62,19 +62,19 @@ def slope_prediction_average(data: tyclasses.Data, x: int) -> int:
 def der_prediction(data: tyclasses.Data, x: int) -> int:
   def g(x: int, l: tyclasses.Data, s: tyclasses.Data) -> int:
     n = len(l.x)
-    ns = len(s.x)
-    xf = round(ns*x/n)
+    ns = len(s.x) 
+    xf = round(ns*x/n) - 1
 
-    if abs(data.x[x] - s.x[xf]) >= 1:
+    if abs(data.x[x - 1] - s.x[xf]) >= 1:
       raise Exception("g(x) function got a difference too high to be accurate")
-    
+
     return xf
   
   smooth_data = tyclasses.Data(data.smooth_data())
   derivative = tyclasses.Data(smooth_data.derivative())
 
   gx = g(x, data, smooth_data)
-  slope = derivative.y[gx]
+  slope = derivative.y[gx - 1]
   deltaX = (x - (x-1))
   yo = data.y[x-1]
 
@@ -82,12 +82,11 @@ def der_prediction(data: tyclasses.Data, x: int) -> int:
   return y
 
 
-
 def entry_prediction(data: tyclasses.Data, x: int) -> int:
   def g(x: int, l: tyclasses.Data, s: tyclasses.Data) -> int:
-    n = len(l.x) - 1
-    ns = len(s.x) - 1
-    xf = floor(ns*x/n)
+    n = len(l.x)
+    ns = len(s.x) 
+    xf = round(ns*x/n)
 
   
     return xf
@@ -105,10 +104,11 @@ def entry_prediction(data: tyclasses.Data, x: int) -> int:
     return weekdays
   
   entries = tyclasses.Data(form_entries(data, x).smooth_data())
-  print("len:", len(entries.y))
   derivative = tyclasses.Data(entries.derivative())
 
-  gx = g(x, data, entries)
+  temp_data = tyclasses.Data((data.x, data.y))
+  temp_data.x = numpy.append(temp_data.x, x)
+  gx = g(x, temp_data, entries)
   predicted_slope = derivative.y[gx]
   yo = data.y[x-1]
 
@@ -116,7 +116,6 @@ def entry_prediction(data: tyclasses.Data, x: int) -> int:
 
   y = predicted_slope*(x - xn1) + yo
   return y
-
 
 def predict_future(data: tyclasses.Data, future: int):
   algors = [random_prediction, random_prediction_unbalanced, slope_prediction, slope_prediction_average, der_prediction, entry_prediction]
@@ -135,6 +134,7 @@ def predict_future(data: tyclasses.Data, future: int):
       print("Entry #" + str(i + 1) + ": ("  + str(x) + "," + str(prediction) + ")")
       temp_data.x = numpy.append(temp_data.x, x)
       temp_data.y = numpy.append(temp_data.y, prediction)
+
 
 def predict(data: tyclasses.Data, x, expected=False):
   def get_error(e: int, a: int) -> int:

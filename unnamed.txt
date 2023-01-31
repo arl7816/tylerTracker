@@ -1,0 +1,3 @@
+*Day (monday=1) | date | lateness | class | class-time
+5 1/27/2023 22 GDAP 8:00
+1 1/30.2023 8.5 GDAP 8:00

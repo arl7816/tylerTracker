@@ -18,14 +18,24 @@ def graph(lateness: Data, weekdays: Data):
   plt.show()
 
 
-def plot(trt: tuple, data: Data, color, legend="", marker="o", key=None):
+def plot(trt: tuple, data: Data, color, legend="", marker=None, key=None):
   if key == None:
     key = trt
 
   sub = plt.subplot(trt[0], trt[1], trt[2])
   subplots[key] = sub
 
-  sub.plot(data.x, data.y, label=legend, color=color)
+  sub.plot(data.x, data.y, label=legend, color=color, marker=marker)
+  return sub
+
+def scatter(trt: tuple, data: Data, color: str, legend="", marker=None, key=None):
+  if key == None:
+    key = trt
+  
+  sub = plt.subplot(trt[0], trt[1], trt[2])
+  subplots[key] = sub
+
+  sub.scatter(data.x, data.y, label=legend, color=color, marker=marker)
   return sub
 
 def bar(trt: tuple, data: Data, color, legend="", marker="o", key=None):

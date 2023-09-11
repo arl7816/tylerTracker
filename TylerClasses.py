@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 import numpy as np
 from scipy.interpolate import make_interp_spline
+from math import pow, sqrt
+from scipy import stats
 
 class Data():
   """[summary]
@@ -28,6 +30,7 @@ class Data():
     if len(data[0]) != len(data[1]):  raise Exception("x and y must be the same")
     self.x = np.array(data[0])
     self.y = np.array(data[1])
+    self.size = len(self.x)
 
   def inverseX(self) -> None:
     """[summary]
@@ -89,14 +92,12 @@ class Data():
     return (X_, Y_)
 
   def derivative(self) -> tuple:
-    
     x = self.x
     y = self.y
     der = np.diff(y) / np.diff(x)
     x2 = (x[:-1] + x[1:]) / 2
     return (x2, der)
   
-
   def get_max(self) -> int:
     """[summary] Gets the max element from the y axis
 
@@ -105,6 +106,8 @@ class Data():
     """
     return self.y.max()
   
+  def get_min(self) -> float:
+    return self.y.min()
 
   def remap(self, max = None) -> None:
     """[summary] stretches each of the data points on the y axis, so that the data fits more nicely between 
@@ -158,6 +161,47 @@ class Data():
       yaxis.append(averages[key]["value"] / averages[key]["amount"])
 
     return xaxis, yaxis
+
+  def mean(self, xaxis = False) -> float:
+    sigma = 0
+    if xaxis: sigma = sum(self.x)
+    else: sigma = sum(self.y)
+
+    return sigma / self.size
+  
+  def mode(self, xaxis = False):
+    if xaxis:
+      return stats.mode(self.x)[0]
+    return stats.mode(self.y)[0]
+  
+  def median(self, xaxis = False):
+    if xaxis: data = sorted(self.x)
+    else: data = sorted(self.y)
+    med = 0
+
+    if self.size == 1:
+      return data[0]
+
+    if self.size % 2 == 1: 
+      med = data[(self.size + 1) / 2 - 1]
+    else:
+      k = self.size / 2
+      med = .5 * (data[k] + data[k - 1])
+
+    return med
+  
+  def standard_deviation(self, xaxis = False):
+    mean = 0
+    if xaxis: mean = self.mean(True)
+    else: mean = self.mean()
+
+    sigma = 0
+    if xaxis: sigma = sum([pow(n - mean, 2) for n in self.x])
+    else: sigma = sum([pow(n - mean, 2) for n in self.y])
+
+    varient = sigma / (self.size - 1)
+
+    return sqrt(varient)
     
 
 @dataclass # decorater

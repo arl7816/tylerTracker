@@ -3,6 +3,8 @@ import TylerClasses as tyclass
 import tyler as tymethod
 import numpy as np
 import tylerprediction as typre
+from math_funcs import *
+from testing import *
 
 def main() -> None:
   data = tyclass.TylerData("tylertrack.txt")
@@ -17,11 +19,16 @@ def main() -> None:
   weekdays.remap(lateness.get_max())
 
   #late_graph = tymethod.plot((3,1,2), lateness, "blue", "lateness (in minutes)", key="lateness")
+  #coes = generate_function_v1(lateness, sin_test, [sin_d0, sin_d1, sin_d2], [1,1,1], 0.0001, 20_000)
+
+  #predict_late = tyclass.Data((lateness.x, [sin_test(lateness.x[i], coes) for i in range(len(lateness.x))]))
+
   late_graph = tymethod.plot((3,1,2), tyclass.Data(lateness.smooth_data()), "purple", key="lateness")
+  #tymethod.plot((3,1,2), tyclass.Data(predict_late.smooth_data()), "cyan", "prediction")
 
   tymethod.set_labels("lateness", "Entry points", "lateness (in minutes)", "What aee doinng Tylaa u silly boi u `:(")
 
-  #tymethod.plot((3,1,2), weekdays, "orange", "entry # (1-5)", key="weekdays")
+  tymethod.plot((3,1,2), weekdays, "orange", "entry # (1-5)", key="weekdays")
 
   tymethod.plot((3,1,2), tyclass.Data(lateness.line_of_best_fit()), "red", legend="Line of best fit (lateness)")
   tymethod.plot((3,1,2), tyclass.Data(weekdays.line_of_best_fit()), "blue", legend="Line of best fit (weekdays)")
